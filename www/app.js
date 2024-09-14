@@ -1,7 +1,7 @@
 let eventsData = [];
 let baseUrl = '';
 let currentUser = '';
-const userNames = ['Jane', 'John', 'Akari', 'Aoi','Emma', 'Leo', 'Sakura', 'Yuto', 'Miku', 'Sora', 'Rei', 'Junnichi', 'Taro', 'Hana', 'Riko'];
+const userNames = ['Jane', 'John', 'Akari', 'Aoi','Sora', 'Junnichi'];
 let joinStatusMap = {};
 
 // ページ読み込み時にランダムなユーザーを選択
@@ -12,6 +12,30 @@ document.addEventListener('DOMContentLoaded', () => {
     h1.innerHTML = `<h1>Hello! ${currentUser}</h1>`
     fetchEvents();
 });
+
+function calculateMatchingCounts() {
+    const userMatchCounts = {};
+    
+    // 全てのイベントをループ
+    Object.values(joinStatusMap).forEach(users => {
+        // 現在のユーザーがこのイベントに参加している場合
+        if (users.includes(currentUser)) {
+            users.forEach(user => {
+                if (user !== currentUser) {
+                    if (!userMatchCounts[user]) {
+                        userMatchCounts[user] = 0;
+                    }
+                    userMatchCounts[user]++;
+                }
+            });
+        }
+    });
+    
+    // 2回以上マッチしたユーザーのみをフィルタリング
+    return Object.entries(userMatchCounts)
+        .filter(([_, count]) => count >= 2)
+        .sort((a, b) => b[1] - a[1]); // マッチ回数で降順ソート
+}
 
 async function loadBaseUrl() {
     try {
@@ -177,6 +201,7 @@ function showEventDetail(eventId) {
     const bookmarks = loadBookmarks();
     const isJoined = joinStatusMap[eventId]?.includes(currentUser) || false;
     const joinedUsers = joinStatusMap[eventId] || [];
+    const matchingCounts = calculateMatchingCounts();
     const modal = document.getElementById('event-detail');
     modal.innerHTML = `
         <div class="modal-content">
@@ -207,6 +232,13 @@ function showEventDetail(eventId) {
                 <ul>
                     ${joinedUsers.map(user => `<li>${user}${user === currentUser ? ' (あなた)' : ''}</li>`).join('')}
                 </ul>
+            </div>
+            <div class="matching-users">
+                <h3>よくマッチするユーザー:</h3>
+                <ul>
+                    ${matchingCounts.map(([user, count]) => `<li>${user} (*${count})</li>`).join('')}
+                </ul>
+                <p class="note">※ (*n)はマッチした回数を表します。2回以上マッチしたユーザーのみ表示されます。</p>
             </div>
         </div>
     `;
