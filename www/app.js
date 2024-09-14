@@ -1,6 +1,18 @@
 let eventsData = [];
 let baseUrl = '';
 
+let currentUser = '';
+const userNames = ['jane', 'john', 'akari', 'aoi'];
+
+// ページ読み込み時にランダムなユーザーを選択
+document.addEventListener('DOMContentLoaded', () => {
+    currentUser = userNames[Math.floor(Math.random() * userNames.length)];
+    console.log('Current user:', currentUser);
+    const h1 = document.getElementById('hello');
+    h1.innerHTML = `<h1>Hello! ${currentUser}</h1>`
+    fetchEvents();
+});
+
 async function loadBaseUrl() {
     try {
         const response = await fetch('address.txt');
@@ -39,6 +51,7 @@ async function fetchEvents() {
             throw new Error(`JSON parse error: ${parseError.message}, Response text: ${text}`);
         }
         console.log("Events data fetched successfully:", eventsData);
+        await fetchJoinStatus(); // Join状態を取得
         displayEventList();
     } catch (error) {
         console.error("イベントデータの取得に失敗しました:", error);
@@ -51,6 +64,43 @@ async function fetchEvents() {
                 <p>しばらくしてからもう一度お試しください。問題が続く場合は管理者にお問い合わせください。</p>
             `;
         }
+    }
+}
+
+async function fetchJoinStatus() {
+    try {
+        const response = await fetch(`${baseUrl}/join-status?user=${currentUser}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const joinStatus = await response.json();
+        eventsData.forEach(event => {
+            event.joined = joinStatus[event.id] || false;
+        });
+    } catch (error) {
+        console.error("Join状態の取得に失敗しました:", error);
+    }
+}
+
+async function toggleJoin(eventId) {
+    const event = eventsData.find(e => e.id === eventId);
+    const newJoinStatus = !event.joined;
+    try {
+        const response = await fetch(`${baseUrl}/toggle-join`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ eventId, user: currentUser, joined: newJoinStatus }),
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        event.joined = newJoinStatus;
+        displayEventList();
+        showEventDetail(eventId); // モーダルを更新
+    } catch (error) {
+        console.error("Join状態の更新に失敗しました:", error);
     }
 }
 
@@ -137,7 +187,9 @@ function showEventDetail(eventId) {
                 <img src="${getPlatformIconPath(event.platform)}" alt="${event.platform} icon" class="event-icon">
                 プラットフォーム: ${event.platform}
             </p>
-            <button class="button join-button"><img src="./img/fas/user.svg" alt="User"> Join</button>
+            <button class="button join-button" data-id="${event.id}">
+                <img src="./img/fas/user.svg" alt="User"> ${event.joined ? 'Leave' : 'Join'}
+            </button>
             <div class="dropdown">
                 <button class="button share-button"><img src="./img/fas/share.svg" alt="Share"> Share</button>
                 <div class="dropdown-content">
@@ -159,8 +211,8 @@ function showEventDetail(eventId) {
     });
 
     // [Join]ボタンが押されたときにcommunityLinkに遷移
-    modal.querySelector('.join-button').addEventListener('click', () => {
-        window.open(event.communityLink, '_blank'); // 新しいタブで開く
+    modal.querySelector('.join-button').addEventListener('click', (e) => {
+        toggleJoin(e.target.dataset.id);
     });
 
     // [Copy link] ボタンでリンクをクリップボードにコピー
