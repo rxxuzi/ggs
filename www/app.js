@@ -1,8 +1,8 @@
 let eventsData = [];
 let baseUrl = '';
-
 let currentUser = '';
-const userNames = ['jane', 'john', 'akari', 'aoi'];
+const userNames = ['Jane', 'John', 'Akari', 'Aoi','Emma', 'Leo', 'Sakura', 'Yuto', 'Miku', 'Sora', 'Rei', 'Junnichi', 'Taro', 'Hana', 'Riko'];
+let joinStatusMap = {};
 
 // ページ読み込み時にランダムなユーザーを選択
 document.addEventListener('DOMContentLoaded', () => {
@@ -43,7 +43,7 @@ async function fetchEvents() {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
         }
-        const text = await response.text(); // レスポンスを文字列として取得
+        const text = await response.text();
         console.log('Response text:', text);
         try {
             eventsData = JSON.parse(text);
@@ -67,16 +67,15 @@ async function fetchEvents() {
     }
 }
 
+
 async function fetchJoinStatus() {
     try {
-        const response = await fetch(`${baseUrl}/join-status?user=${currentUser}`);
+        const response = await fetch(`${baseUrl}/join-status`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const joinStatus = await response.json();
-        eventsData.forEach(event => {
-            event.joined = joinStatus[event.id] || false;
-        });
+        joinStatusMap = await response.json();
+        console.log("Join status fetched:", joinStatusMap);
     } catch (error) {
         console.error("Join状態の取得に失敗しました:", error);
     }
@@ -84,7 +83,8 @@ async function fetchJoinStatus() {
 
 async function toggleJoin(eventId) {
     const event = eventsData.find(e => e.id === eventId);
-    const newJoinStatus = !event.joined;
+    const isJoined = joinStatusMap[eventId]?.includes(currentUser) || false;
+    const newJoinStatus = !isJoined;
     try {
         const response = await fetch(`${baseUrl}/toggle-join`, {
             method: 'POST',
@@ -96,8 +96,7 @@ async function toggleJoin(eventId) {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        event.joined = newJoinStatus;
-        displayEventList();
+        await fetchJoinStatus(); // Join状態を再取得
         showEventDetail(eventId); // モーダルを更新
     } catch (error) {
         console.error("Join状態の更新に失敗しました:", error);
@@ -176,6 +175,8 @@ function getPlatformIconPath(platform) {
 function showEventDetail(eventId) {
     const event = eventsData.find(e => e.id === eventId);
     const bookmarks = loadBookmarks();
+    const isJoined = joinStatusMap[eventId]?.includes(currentUser) || false;
+    const joinedUsers = joinStatusMap[eventId] || [];
     const modal = document.getElementById('event-detail');
     modal.innerHTML = `
         <div class="modal-content">
@@ -188,7 +189,7 @@ function showEventDetail(eventId) {
                 プラットフォーム: ${event.platform}
             </p>
             <button class="button join-button" data-id="${event.id}">
-                <img src="./img/fas/user.svg" alt="User"> ${event.joined ? 'Leave' : 'Join'}
+                <img src="./img/fas/user.svg" alt="User"> ${isJoined ? 'Leave' : 'Join'}
             </button>
             <div class="dropdown">
                 <button class="button share-button"><img src="./img/fas/share.svg" alt="Share"> Share</button>
@@ -201,6 +202,12 @@ function showEventDetail(eventId) {
                 <img src="${bookmarks[event.id] ? './img/fas/bm-ed.svg' : './img/fas/bm.svg'}" alt="Bookmark">
                 ${bookmarks[event.id] ? 'ブックマーク解除' : 'ブックマーク'}
             </button>
+            <div class="joined-users">
+                <h3>参加者:</h3>
+                <ul>
+                    ${joinedUsers.map(user => `<li>${user}${user === currentUser ? ' (あなた)' : ''}</li>`).join('')}
+                </ul>
+            </div>
         </div>
     `;
     modal.style.display = "block";
@@ -209,8 +216,7 @@ function showEventDetail(eventId) {
     modal.querySelector('.close').addEventListener('click', () => {
         modal.style.display = "none";
     });
-
-    // [Join]ボタンが押されたときにcommunityLinkに遷移
+    
     modal.querySelector('.join-button').addEventListener('click', (e) => {
         toggleJoin(e.target.dataset.id);
     });
