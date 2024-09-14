@@ -311,3 +311,40 @@ body {
 .dropdown-content .button:hover {
     background-color: var(--background-color);
 }
+
+.collapsible {
+    background-color: transparent; /* 背景を透明に */
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 18px 0; /* 左右のパディングを削除 */
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 18px; /* 見出しのサイズを大きく */
+    transition: 0.4s;
+    display: flex;
+    justify-content: flex-start; /* 左寄せに変更 */
+    align-items: center;
+}
+
+.active, .collapsible:hover {
+    background-color: transparent; /* ホバー時も透明に */
+}
+
+.collapsible-content {
+    padding: 0 18px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+}
+
+.collapse-icon {
+    transition: transform 0.2s ease-out;
+    margin-left: 10px; /* アイコンと見出しテキストの間隔を追加 */
+    font-size: 0.8em; /* アイコンサイズを調整 */
+}
+
+.active .collapse-icon {
+    transform: rotate(180deg);
+}

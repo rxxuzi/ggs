@@ -7,43 +7,47 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div>
-            <h1>ブックマーク & 検索</h1>
-        </div>
-        
-        <div role="main">
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="イベントを検索...">
-                <button id="search-button">検索</button>
-            </div>
-            
-            <h2>ブックマーク済みイベント</h2>
-            <div id="bookmarked-events"></div>
-            
-            <h2>検索結果</h2>
-            <div id="search-results"></div>
-        </div>
+<div class="container">
+    <div>
+        <h1>ブックマーク & 検索</h1>
     </div>
 
-    <div id="event-detail" class="modal"></div>
+    <div role="main">
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="イベントを検索...">
+            <button id="search-button">検索</button>
+        </div>
 
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <img src="./img/fas/home.svg" alt="Home">
-            <span>ホーム</span>
-        </a>
-        <a href="uploader.html" class="nav-item">
-            <img src="./img/fas/plus.svg" alt="Add Event">
-            <span>イベント追加</span>
-        </a>
-        <a href="bookmark.html" class="nav-item active">
-            <img src="./img/fas/bm.svg" alt="Bookmarks">
-            <span>ブックマーク</span>
-        </a>
-    </nav>
+        <h2 class="collapsible">
+            検索結果<span class="collapse-icon">▼</span>
+        </h2>
 
-    <script src="app.js"></script>
-    <script src="bookmark.js"></script>
+        <h2 class="collapsible">
+            ブックマーク済みイベント<span class="collapse-icon">▼</span>
+        </h2>
+        <div id="bookmarked-events" class="collapsible-content"></div>
+
+    </div>ß
+</div>
+
+<div id="event-detail" class="modal"></div>
+
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+        <img src="./img/fas/home.svg" alt="Home">
+        <span>ホーム</span>
+    </a>
+    <a href="uploader.html" class="nav-item">
+        <img src="./img/fas/plus.svg" alt="Add Event">
+        <span>イベント追加</span>
+    </a>
+    <a href="bookmark.html" class="nav-item active">
+        <img src="./img/fas/bm.svg" alt="Bookmarks">
+        <span>ブックマーク</span>
+    </a>
+</nav>
+
+<script src="app.js"></script>
+<script src="bookmark.js"></script>
 </body>
 </html>
