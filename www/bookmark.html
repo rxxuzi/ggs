@@ -3,18 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Notification</title>
+    <title>ブックマーク & 検索</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Event Notification</h1>
-        </header>
-        <main id="event-list" role="main">
-        </main>
+        <div>
+            <h1>ブックマーク & 検索</h1>
+        </div>
+        
+        <div role="main">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="イベントを検索...">
+                <button id="search-button">検索</button>
+            </div>
+            
+            <h2>ブックマーク済みイベント</h2>
+            <div id="bookmarked-events"></div>
+            
+            <h2>検索結果</h2>
+            <div id="search-results"></div>
+        </div>
     </div>
+
     <div id="event-detail" class="modal"></div>
+
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item">
             <img src="./img/fas/home.svg" alt="Home">
@@ -29,6 +42,8 @@
             <span>ブックマーク</span>
         </a>
     </nav>
+
     <script src="app.js"></script>
+    <script src="bookmark.js"></script>
 </body>
 </html>

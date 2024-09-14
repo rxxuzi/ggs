@@ -1,4 +1,21 @@
-document.addEventListener('DOMContentLoaded', () => {
+let baseUrl = '';
+
+async function loadBaseUrl() {
+    try {
+        const response = await fetch('address.txt');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        baseUrl = await response.text();
+        baseUrl = baseUrl.trim(); // 余分な空白を削除
+        console.log("Base URL loaded:", baseUrl);
+    } catch (error) {
+        console.error("Base URLの読み込みに失敗しました:", error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadBaseUrl();
     const form = document.getElementById('eventForm');
     const resultDiv = document.getElementById('result');
 
@@ -18,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/events', {
+            const response = await fetch(`${baseUrl}/events`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

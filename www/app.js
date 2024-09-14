@@ -1,22 +1,92 @@
 let eventsData = [];
+let baseUrl = '';
+
+async function loadBaseUrl() {
+    try {
+        const response = await fetch('address.txt');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        baseUrl = await response.text();
+        baseUrl = baseUrl.trim();
+        console.log("Base URL loaded:", baseUrl);
+    } catch (error) {
+        console.error("Base URLの読み込みに失敗しました:", error);
+    }
+}
 
 async function fetchEvents() {
+    if (!baseUrl) {
+        await loadBaseUrl();
+    }
     try {
-        const response = await fetch('http://localhost:8080/events');
+        const response = await fetch(`${baseUrl}/events`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         eventsData = await response.json();
-        console.log("Get events!\n");
+        console.log("Get events!\n", eventsData);
         displayEventList();
     } catch (error) {
         console.error("イベントデータの取得に失敗しました:", error);
-        document.getElementById('event-list').innerHTML = `
-            <p>イベントデータの取得に失敗しました。しばらくしてからもう一度お試しください。</p>
-        `;
+        const eventList = document.getElementById('event-list');
+        if (eventList) {
+            eventList.innerHTML = `
+                <p>イベントデータの取得に失敗しました。しばらくしてからもう一度お試しください。</p>
+            `;
+        }
     }
 }
 
+function displayEventList() {
+    const eventList = document.getElementById('event-list');
+    if (!eventList) {
+        console.error("event-list element not found");
+        return;
+    }
+    const bookmarks = loadBookmarks();
+    if (!eventsData || eventsData.length === 0) {
+        eventList.innerHTML = '<p>イベントがありません。</p>';
+        return;
+    }
+    eventList.innerHTML = eventsData.map(event => `
+        <div class="event-item" data-id="${event.id}">
+            <div class="event-icon-container">
+                <img src="${getPlatformIconPath(event.platform)}" alt="${event.platform} icon" class="event-icon">
+            </div>
+            <div class="event-info">
+                <div class="event-name">${event.eventName}</div>
+                <div class="event-description">${event.shortDescription}</div>
+                <div class="event-author">
+                    <span>主催者: ${event.author}</span>
+                </div>
+            </div>
+            <img src="${bookmarks[event.id] ? './img/fas/bm-ed.svg' : './img/fas/bm.svg'}" 
+                 alt="Bookmark" 
+                 class="bookmark-icon"
+                 data-id="${event.id}">
+        </div>
+    `).join('');
+
+    addEventListeners(eventList);
+}
+
+function addEventListeners(container) {
+    container.querySelectorAll('.event-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('bookmark-icon')) {
+                showEventDetail(item.dataset.id);
+            }
+        });
+    });
+
+    container.querySelectorAll('.bookmark-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleBookmark(icon.dataset.id);
+        });
+    });
+}
 
 const platformIcons = {
     "GitHub": "./img/svgs/github.svg",
