@@ -1,73 +1,22 @@
-// app.js
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
+let eventsData = [];
+
+async function fetchEvents() {
+    try {
+        const response = await fetch('http://localhost:8080/events');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        eventsData = await response.json();
+        console.log("Get events!\n");
+        displayEventList();
+    } catch (error) {
+        console.error("イベントデータの取得に失敗しました:", error);
+        document.getElementById('event-list').innerHTML = `
+            <p>イベントデータの取得に失敗しました。しばらくしてからもう一度お試しください。</p>
+        `;
+    }
 }
 
-const eventsData = [
-    {
-        id: uuidv4(),
-        eventName: "Open Source Friday with GitHub CLI!",
-        shortDescription: "GitHub CLIを使ったオープンソース開発イベント",
-        description: "GitHub CLIを使用してターミナルから直接GitHubを操作する方法を学びます。Andy、William、その他のエキスパートと一緒に、オープンソース開発の新しい可能性を探求しましょう。",
-        platform: "GitHub",
-        deadline: "2024-09-13",
-        conditions: "GitHubアカウントを持っていること",
-        communityLink: "https://github.com/cli/cli"
-    },
-    {
-        id: uuidv4(),
-        eventName: "Oracle Multicloud Partnerships Webinar",
-        shortDescription: "Oracleのマルチクラウドパートナーシップについて学ぶ",
-        description: "AWSやGoogleとのパートナーシップにより、Oracleがクラウドの常識を変える方法をご紹介します。グローバル展開を加速させる新しいサービスについても解説します。",
-        platform: "Webex",
-        deadline: "2024-09-20",
-        conditions: "ITプロフェッショナル、クラウドエンジニア",
-        communityLink: "https://www.oracle.com/cloud/"
-    },
-    {
-        id: uuidv4(),
-        eventName: "Telegram UX/UI Design Challenge",
-        shortDescription: "UX/UIデザインのコンペティション",
-        description: "Telegramでのユーザーエクスペリエンス向上を目指したデザインコンペです。クリエイティブなソリューションを考案し、世界中の参加者と競い合いましょう。",
-        platform: "Telegram",
-        deadline: "2024-09-25",
-        conditions: "デザインに興味がある人、Telegramアカウントが必要",
-        communityLink: "https://t.me/telegram_design_challenge"
-    },
-    {
-        id: uuidv4(),
-        eventName: "Facebook Business Growth Strategies",
-        shortDescription: "Facebookを使ったビジネス拡大のためのウェビナー",
-        description: "Facebookの専門家とともに、ビジネスの成長戦略について学びます。広告、ページ運営、ファン層拡大のノウハウを学べるセミナーです。",
-        platform: "Facebook",
-        deadline: "2024-10-01",
-        conditions: "中小企業経営者、マーケティング担当者",
-        communityLink: "https://www.facebook.com/business/webinars"
-    },
-    {
-        id: uuidv4(),
-        eventName: "Slack Community Wellness Retreat",
-        shortDescription: "Slackコミュニティによるメンタルヘルスイベント",
-        description: "メンタルヘルスやウェルネスをテーマにした、リラックスと自己改善を促すイベントです。業界の専門家によるセッションやリソースを活用し、ワークライフバランスの改善を目指しましょう。",
-        platform: "Slack",
-        deadline: "2024-09-30",
-        conditions: "Slackアカウントが必要、ウェルネスに関心がある方",
-        communityLink: "https://slack.com/community-wellness-retreat"
-    },
-    {
-        id: uuidv4(),
-        eventName: "Zoom Virtual Cooking Class",
-        shortDescription: "オンラインでの料理教室",
-        description: "プロのシェフと一緒にZoomで料理を学びましょう。初心者から中級者向けのクラスで、楽しく料理スキルを向上させることができます。",
-        platform: "Zoom",
-        deadline: "2024-09-22",
-        conditions: "Zoomアカウント、料理道具を用意",
-        communityLink: "https://zoom.us/virtual-cooking-class"
-    }
-];
 
 const platformIcons = {
     "GitHub": "./img/svgs/github.svg",
@@ -96,12 +45,14 @@ function showEventDetail(eventId) {
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>${event.eventName}</h2>
+            <p>${event.description}</p>
             <p><img src="./img/fas/calender.svg" alt="Calendar"> 締切: ${event.deadline}</p>
             <p><img src="./img/fas/user.svg" alt="User"> 応募条件: ${event.conditions}</p>
             <p>
                 <img src="${getPlatformIconPath(event.platform)}" alt="${event.platform} icon" class="event-icon">
                 プラットフォーム: ${event.platform}
             </p>
+            <p><img src="./img/fas/person.svg" alt="author"> 主催者: ${event.author}</p>
             <button class="button join-button"><img src="./img/fas/user.svg" alt="User"> Join</button>
             <button class="button share-button"><img src="./img/fas/share.svg" alt="Share"> Share</button>
             <button class="button bookmark-button" data-id="${event.id}">
@@ -145,6 +96,9 @@ function displayEventList() {
             <div class="event-info">
                 <div class="event-name">${event.eventName}</div>
                 <div class="event-description">${event.shortDescription}</div>
+                <div class="event-author">
+                    <span>主催者: ${event.author}</span>
+                </div>
             </div>
             <img src="${bookmarks[event.id] ? './img/fas/bm-ed.svg' : './img/fas/bm.svg'}" 
                  alt="Bookmark" 
@@ -189,3 +143,4 @@ function toggleBookmark(eventId) {
 }
 
 document.addEventListener('DOMContentLoaded', displayEventList);
+document.addEventListener('DOMContentLoaded', fetchEvents);

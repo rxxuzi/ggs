@@ -3,22 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ggs - イベント通知アプリ</title>
+    <title>Event Notification</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" type="image" href="favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>event notification</h1>
+            <h1>Event Notification</h1>
         </header>
-        <main id="event-list">
+        <main id="event-list" role="main">
         </main>
     </div>
-    <div id="event-detail" class="modal">
-    </div>
+    <div id="event-detail" class="modal"></div>
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active">
+            <img src="./img/fas/home.svg" alt="Home">
+            <span>ホーム</span>
+        </a>
+        <a href="uploader.html" class="nav-item">
+            <img src="./img/fas/plus.svg" alt="Add Event">
+            <span>イベント追加</span>
+        </a>
+    </nav>
     <script src="app.js"></script>
 </body>
 </html>

@@ -13,7 +13,6 @@ func main() {
 	http.Handle("/", fileServer)
 
 	port := ":5151"
-	fmt.Printf("サーバーがポート%sで起動しています...\n", port)
 	if err := http.ListenAndServe(port, nil); err != nil {
 		fmt.Printf("サーバーエラー: %v\n", err)
 	}
