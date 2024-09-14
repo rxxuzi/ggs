@@ -116,6 +116,11 @@ function showEventDetail(eventId) {
         modal.style.display = "none";
     });
 
+    // [join]ボタンが押されたときにcommunityLinkに遷移
+    modal.querySelector('.join-button').addEventListener('click', () => {
+        window.open(event.communityLink, '_blank'); // 新しいタブで開く
+    });
+
     modal.querySelector('.bookmark-button').addEventListener('click', (e) => {
         toggleBookmark(e.target.dataset.id);
         showEventDetail(eventId); // モーダルを更新
@@ -127,6 +132,7 @@ function showEventDetail(eventId) {
         }
     });
 }
+
 
 function displayEventList() {
     const eventList = document.getElementById('event-list');
