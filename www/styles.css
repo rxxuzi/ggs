@@ -278,3 +278,36 @@ header h1 {
 body {
     padding-bottom: 60px;
 }
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--card-background);
+    box-shadow: var(--box-shadow);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-content .button {
+    display: block;
+    background-color: transparent;
+    color: var(--text-primary);
+    text-align: left;
+    border: none;
+    padding: 5px 10px;
+    width: 100%;
+}
+
+.dropdown-content .button:hover {
+    background-color: var(--background-color);
+}
