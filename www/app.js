@@ -20,19 +20,35 @@ async function fetchEvents() {
         await loadBaseUrl();
     }
     try {
-        const response = await fetch(`${baseUrl}/events`);
+        console.log(`Attempting to fetch events from: ${baseUrl}/events`);
+        const response = await fetch(`${baseUrl}/events`, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
         }
-        eventsData = await response.json();
-        console.log("Get events!\n", eventsData);
+        const text = await response.text(); // レスポンスを文字列として取得
+        console.log('Response text:', text);
+        try {
+            eventsData = JSON.parse(text);
+        } catch (parseError) {
+            throw new Error(`JSON parse error: ${parseError.message}, Response text: ${text}`);
+        }
+        console.log("Events data fetched successfully:", eventsData);
         displayEventList();
     } catch (error) {
         console.error("イベントデータの取得に失敗しました:", error);
         const eventList = document.getElementById('event-list');
         if (eventList) {
             eventList.innerHTML = `
-                <p>イベントデータの取得に失敗しました。しばらくしてからもう一度お試しください。</p>
+                <p>イベントデータの取得に失敗しました。</p>
+                <p>エラー詳細: ${error.message}</p>
+                <p>URL: ${baseUrl}/events</p>
+                <p>しばらくしてからもう一度お試しください。問題が続く場合は管理者にお問い合わせください。</p>
             `;
         }
     }
