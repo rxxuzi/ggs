@@ -1,0 +1,198 @@
+:root {
+    --primary-color: #4a90e2;
+    --secondary-color: #ff4081;
+    --background-color: #f5f5f5;
+    --card-background: #ffffff;
+    --text-primary: #333333;
+    --text-secondary: #666666;
+    --box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    box-shadow: var(--box-shadow);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+#event-list {
+    margin-top: 20px;
+}
+
+.event-item {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: var(--box-shadow);
+    margin-bottom: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.event-item:active {
+    transform: scale(0.98);
+}
+
+.event-icon-container {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.event-icon-container img {
+    width: 50px;
+    height: 50px;
+}
+
+
+.event-icon-container i {
+    font-size: 24px;
+    color: white;
+}
+
+.event-info {
+    flex-grow: 1;
+}
+
+.event-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: var(--text-primary);
+}
+
+.event-description {
+    font-size: 0.9em;
+    color: var(--text-secondary);
+}
+
+.notification-icon {
+    color: var(--secondary-color);
+    font-size: 20px;
+    margin-left: 10px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: var(--card-background);
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.close {
+    color: var(--text-secondary);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 5px 0 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    transition: var(--transition);
+}
+
+.join-button {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.share-button {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.modal-content img {
+    width: 20px; /* アイコンの幅 */
+    height: 20px; /* アイコンの高さ */
+    vertical-align: middle; /* テキストとアイコンを水平に整列 */
+    margin-right: 5px; /* テキストとの間のスペース */
+}
+
+.button img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    vertical-align: middle;
+    fill: white;
+    filter: brightness(0) invert(1); /* 外部SVG用に白に変更 */
+}
+
+
+.button:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 480px) {
+    .event-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .event-icon-container {
+        margin-bottom: 10px;
+    }
+
+    .notification-icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+}
