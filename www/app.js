@@ -90,6 +90,7 @@ function getPlatformIconPath(platform) {
 
 function showEventDetail(eventId) {
     const event = eventsData.find(e => e.id === eventId);
+    const bookmarks = loadBookmarks();
     const modal = document.getElementById('event-detail');
     modal.innerHTML = `
         <div class="modal-content">
@@ -103,12 +104,21 @@ function showEventDetail(eventId) {
             </p>
             <button class="button join-button"><img src="./img/fas/user.svg" alt="User"> Join</button>
             <button class="button share-button"><img src="./img/fas/share.svg" alt="Share"> Share</button>
+            <button class="button bookmark-button" data-id="${event.id}">
+                <img src="${bookmarks[event.id] ? './img/fas/bm-ed.svg' : './img/fas/bm.svg'}" alt="Bookmark">
+                ${bookmarks[event.id] ? 'ブックマーク解除' : 'ブックマーク'}
+            </button>
         </div>
     `;
     modal.style.display = "block";
 
     modal.querySelector('.close').addEventListener('click', () => {
         modal.style.display = "none";
+    });
+
+    modal.querySelector('.bookmark-button').addEventListener('click', (e) => {
+        toggleBookmark(e.target.dataset.id);
+        showEventDetail(eventId); // モーダルを更新
     });
 
     window.addEventListener('click', (event) => {
@@ -118,9 +128,9 @@ function showEventDetail(eventId) {
     });
 }
 
-
 function displayEventList() {
     const eventList = document.getElementById('event-list');
+    const bookmarks = loadBookmarks();
     eventList.innerHTML = eventsData.map(event => `
         <div class="event-item" data-id="${event.id}">
             <div class="event-icon-container">
@@ -130,13 +140,46 @@ function displayEventList() {
                 <div class="event-name">${event.eventName}</div>
                 <div class="event-description">${event.shortDescription}</div>
             </div>
-            <i class="fas fa-bell notification-icon"></i>
+            <img src="${bookmarks[event.id] ? './img/fas/bm-ed.svg' : './img/fas/bm.svg'}" 
+                 alt="Bookmark" 
+                 class="bookmark-icon"
+                 data-id="${event.id}">
         </div>
     `).join('');
 
     eventList.querySelectorAll('.event-item').forEach(item => {
-        item.addEventListener('click', () => showEventDetail(item.dataset.id));
+        item.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('bookmark-icon')) {
+                showEventDetail(item.dataset.id);
+            }
+        });
     });
+
+    eventList.querySelectorAll('.bookmark-icon').forEach(icon => {
+        icon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleBookmark(icon.dataset.id);
+        });
+    });
+}
+
+// ブックマークの状態を保存する関数
+function saveBookmarks(bookmarks) {
+    localStorage.setItem('eventBookmarks', JSON.stringify(bookmarks));
+}
+
+// ブックマークの状態を読み込む関数
+function loadBookmarks() {
+    const savedBookmarks = localStorage.getItem('eventBookmarks');
+    return savedBookmarks ? JSON.parse(savedBookmarks) : {};
+}
+
+// ブックマークの切り替え
+function toggleBookmark(eventId) {
+    let bookmarks = loadBookmarks();
+    bookmarks[eventId] = !bookmarks[eventId];
+    saveBookmarks(bookmarks);
+    displayEventList(); // リストを更新
 }
 
 document.addEventListener('DOMContentLoaded', displayEventList);

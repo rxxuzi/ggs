@@ -196,3 +196,36 @@ header h1 {
         right: 15px;
     }
 }
+
+.bookmark-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.bookmark-button {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.bookmark-button img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+/* モバイル対応 */
+@media (max-width: 480px) {
+    .event-item {
+        position: relative;
+        padding-right: 40px; /* ブックマークアイコンのためのスペース */
+    }
+
+    .bookmark-icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+}
