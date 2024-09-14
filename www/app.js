@@ -86,7 +86,7 @@ function showEventDetail(eventId) {
 
     // [Share on X] ボタンでXにシェア
     modal.querySelector('.share-x-button').addEventListener('click', () => {
-        const shareText = `こんにちは、私とこのイベントに参加しませんか？\nイベント: ${event.eventName}\n締切: ${event.deadline}\nリンク: ${event.communityLink}`;
+        const shareText = `私とこのイベントに参加しませんか？\nイベント: ${event.eventName}\n締切: ${event.deadline}\nリンク: ${event.communityLink}`;
         const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}`;
         window.open(twitterUrl, '_blank');
     });
