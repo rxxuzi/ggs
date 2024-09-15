@@ -3,33 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Notification</title>
+    <title>イベント一覧</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1 id="hello"></h1>
-        </header>
-        <main id="event-list">
-        </main>
+<div class="container">
+    <div>
+        <h1 id="hello"></h1>
     </div>
-    <div id="event-detail" class="modal"></div>
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <img src="./img/fas/home.svg" alt="Home">
-            <span>ホーム</span>
-        </a>
-        <a href="uploader.html" class="nav-item">
-            <img src="./img/fas/plus.svg" alt="Add Event">
-            <span>イベント追加</span>
-        </a>
-        <a href="bookmark.html" class="nav-item active">
-            <img src="./img/fas/bm.svg" alt="Bookmarks">
-            <span>ブックマーク</span>
-        </a>
-    </nav>
-    <script src="app.js"></script>
-</body>
 
+    <div role="main">
+        <h2 class="section-title">イベント一覧</h2>
+        <div id="event-list"></div>
+    </div>
+</div>
+
+<div id="event-detail" class="modal"></div>
+
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item active">
+        <img src="./img/fas/home.svg" alt="Home">
+        <span>ホーム</span>
+    </a>
+    <a href="uploader.html" class="nav-item">
+        <img src="./img/fas/plus.svg" alt="Add Event">
+        <span>イベント追加</span>
+    </a>
+    <a href="bookmark.html" class="nav-item">
+        <img src="./img/fas/bm.svg" alt="Bookmarks">
+        <span>ブックマーク</span>
+    </a>
+</nav>
+
+<script src="app.js"></script>
+</body>
 </html>

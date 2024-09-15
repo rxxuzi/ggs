@@ -213,6 +213,7 @@ function showEventDetail(eventId) {
                 <img src="${getPlatformIconPath(event.platform)}" alt="${event.platform} icon" class="event-icon">
                 プラットフォーム: ${event.platform}
             </p>
+            <p><img src="./img/fas/link.svg" alt="Link"> リンク: <a href="${event.communityLink}" target="_blank">${event.communityLink}</a></p>
             <button class="button join-button" data-id="${event.id}">
                 <img src="./img/fas/user.svg" alt="User"> ${isJoined ? 'Leave' : 'Join'}
             </button>
@@ -242,6 +243,7 @@ function showEventDetail(eventId) {
             </div>
         </div>
     `;
+
     modal.style.display = "block";
 
     // 閉じるボタン

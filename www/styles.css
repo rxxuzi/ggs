@@ -348,3 +348,19 @@ body {
 .active .collapse-icon {
     transform: rotate(180deg);
 }
+
+.section-title {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100px;
+    height: 2px;
+    background-color: var(--primary-color);
+}
