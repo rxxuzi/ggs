@@ -68,13 +68,11 @@ async function fetchEvents() {
             throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
         }
         const text = await response.text();
-        console.log('Response text:', text);
         try {
             eventsData = JSON.parse(text);
         } catch (parseError) {
             throw new Error(`JSON parse error: ${parseError.message}, Response text: ${text}`);
         }
-        console.log("Events data fetched successfully:", eventsData);
         await fetchJoinStatus(); // Join状態を取得
         displayEventList();
     } catch (error) {
@@ -181,8 +179,10 @@ const platformIcons = {
     "GitHub": "./img/svgs/github.svg",
     "Discord": "./img/svgs/discord.svg",
     "Google Meet": "./img/svgs/google.svg",
+    "Google": "./img/svgs/google.svg",
     "Telegram": "./img/svgs/telegram.svg",
     "Microsoft Teams": "./img/svgs/microsoft-teams.svg",
+    "Teams": "./img/svgs/microsoft-teams.svg",
     "Slack": "./img/svgs/slack.svg",
     "Skype": "./img/svgs/skype.svg",
     "Meta": "./img/svgs/meta.svg",
