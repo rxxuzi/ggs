@@ -8,64 +8,70 @@
     <link rel="stylesheet" href="uploader.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>イベントを計画する</h1>
-        </header>
-        <main>
-            <form id="eventForm">
-                <div class="form-group">
-                    <label for="eventName">イベント名:</label>
-                    <input type="text" id="eventName" required>
-                </div>
-                <div class="form-group">
-                    <label for="shortDescription">短い説明:</label>
-                    <input type="text" id="shortDescription" required>
-                </div>
-                <div class="form-group">
-                    <label for="description">説明:</label>
-                    <textarea id="description" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="platform">プラットフォーム:</label>
-                    <input type="text" id="platform" required>
-                </div>
-                <div class="form-group">
-                    <label for="deadline">締め切り:</label>
-                    <input type="date" id="deadline" required>
-                </div>
-                <div class="form-group">
-                    <label for="conditions">条件:</label>
-                    <input type="text" id="conditions" required>
-                </div>
-                <div class="form-group">
-                    <label for="communityLink">コミュニティリンク:</label>
-                    <input type="url" id="communityLink" required>
-                </div>
-                <div class="form-group">
-                    <label for="author">作成者:</label>
-                    <input type="email" id="author" required>
-                </div>
-                <button type="submit" class="button">イベントを追加</button>
-            </form>
-            <div id="result"></div>
-        </main>
+<div class="container">
+    <div>
+        <h1>イベントを計画する</h1>
     </div>
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">
-            <img src="./img/fas/home.svg" alt="Home">
-            <span>ホーム</span>
-        </a>
-        <a href="uploader.html" class="nav-item">
-            <img src="./img/fas/plus.svg" alt="Add Event">
-            <span>イベント追加</span>
-        </a>
-        <a href="bookmark.html" class="nav-item active">
-            <img src="./img/fas/bm.svg" alt="Bookmarks">
-            <span>ブックマーク</span>
-        </a>
-    </nav>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
-    <script src="uploader.js"></script>
+
+    <div role="main">
+        <h2 class="section-title">新規イベント作成</h2>
+        <form id="eventForm">
+            <div class="form-group">
+                <label for="eventName">イベント名:</label>
+                <input type="text" id="eventName" required>
+            </div>
+            <div class="form-group">
+                <label for="shortDescription">短い説明:</label>
+                <input type="text" id="shortDescription" required>
+            </div>
+            <div class="form-group">
+                <label for="description">説明:</label>
+                <textarea id="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="platform">プラットフォーム:</label>
+                <input type="text" id="platform" required>
+            </div>
+            <div class="form-group">
+                <label for="deadline">締め切り:</label>
+                <input type="date" id="deadline" required>
+            </div>
+            <div class="form-group">
+                <label for="conditions">条件:</label>
+                <input type="text" id="conditions" required>
+            </div>
+            <div class="form-group">
+                <label for="communityLink">コミュニティリンク:</label>
+                <input type="url" id="communityLink" required>
+            </div>
+            <div class="form-group">
+                <label for="author">作成者:</label>
+                <input type="email" id="author" required>
+            </div>
+            <button type="submit" class="button">イベントを追加</button>
+        </form>
+        <div id="result"></div>
+    </div>
+</div>
+
+<div id="event-detail" class="modal"></div>
+
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item">
+        <img src="./img/fas/home.svg" alt="Home">
+        <span>ホーム</span>
+    </a>
+    <a href="uploader.html" class="nav-item active">
+        <img src="./img/fas/plus.svg" alt="Add Event">
+        <span>イベント追加</span>
+    </a>
+    <a href="bookmark.html" class="nav-item">
+        <img src="./img/fas/bm.svg" alt="Bookmarks">
+        <span>ブックマーク</span>
+    </a>
+</nav>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
+<script src="uploader.js"></script>
 </body>
 </html>

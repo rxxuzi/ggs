@@ -364,3 +364,33 @@ body {
     height: 2px;
     background-color: var(--primary-color);
 }
+
+.search-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#search-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid var(--text-secondary);
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+    background-color: var(--card-background);
+    color: var(--text-primary);
+}
+
+#search-button {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+#search-button:hover {
+    background-color: #3a7bc1;
+}

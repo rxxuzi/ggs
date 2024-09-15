@@ -6,6 +6,7 @@ label {
     display: block;
     margin-bottom: 5px;
     color: var(--text-primary);
+    font-weight: 500;
 }
 
 input[type="text"],
@@ -15,9 +16,22 @@ input[type="email"],
 textarea {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--text-secondary);
     border-radius: 4px;
     font-size: 16px;
+    background-color: var(--card-background);
+    color: var(--text-primary);
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="url"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
 textarea {
@@ -33,6 +47,7 @@ button[type="submit"] {
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 button[type="submit"]:hover {
@@ -49,4 +64,20 @@ button[type="submit"]:hover {
     background-color: #e8f5e9;
     border: 1px solid #a5d6a7;
     color: #1b5e20;
+}
+
+.section-title {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100px;
+    height: 2px;
+    background-color: var(--primary-color);
 }

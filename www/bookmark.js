@@ -49,6 +49,11 @@ function performSearch(query) {
             searchResultsContainer.innerHTML = searchResults.map(createEventHTML).join('');
             addEventListeners(searchResultsContainer);
         }
+
+        // 検索結果を表示するために collapsible を開く
+        const searchResultsHeader = document.querySelector('.collapsible');
+        searchResultsHeader.classList.add('active');
+        searchResultsContainer.style.maxHeight = searchResultsContainer.scrollHeight + "px";
     } else {
         console.error('Search results container not found');
     }
