@@ -4,14 +4,23 @@ let currentUser = '';
 const userNames = ['Jane'];
 let joinStatusMap = {};
 
-// ページ読み込み時にランダムなユーザーを選択
 document.addEventListener('DOMContentLoaded', () => {
     currentUser = userNames[Math.floor(Math.random() * userNames.length)];
     console.log('Current user:', currentUser);
     const h1 = document.getElementById('hello');
     h1.innerHTML = `<h1>Hello! ${currentUser}</h1>`
-    fetchEvents();
+    loadEvents();
 });
+
+function loadEvents() {
+    eventsData = JSON.parse(localStorage.getItem('eventsData')) || [];
+    joinStatusData = JSON.parse(localStorage.getItem('joinStatusData')) || [];
+    displayEventList();
+}
+
+function updateEventList() {
+    loadEvents();
+}
 
 function calculateMatchingCounts() {
     const userMatchCounts = {};
@@ -221,7 +230,7 @@ function showEventDetail(eventId) {
     const bookmarks = loadBookmarks();
     const joinedUsers = getJoinedUsers(eventId);
     const isJoined = isUserJoined(eventId, currentUser);
-    const matchingCounts = calculateMatchingCounts();
+    const matchingCounts = isJoined ? calculateMatchingCounts() : [];
     const modal = document.getElementById('event-detail');
     modal.innerHTML = `
         <div class="modal-content">
@@ -254,12 +263,14 @@ function showEventDetail(eventId) {
                     ${joinedUsers.map(user => `<li>${user}${user === currentUser ? ' (あなた)' : ''}</li>`).join('')}
                 </ul>
             </div>
+            ${isJoined ? `
             <div class="matching-users">
                 <h3>よくマッチするユーザー:</h3>
                 <ul>
                     ${matchingCounts.map(([user, count]) => `<li>${user} (${count})</li>`).join('')}
                 </ul>
             </div>
+            ` : ''}
         </div>
     `;
 
@@ -304,7 +315,15 @@ function showEventDetail(eventId) {
 
 function displayEventList() {
     const eventList = document.getElementById('event-list');
+    if (!eventList) {
+        console.error("event-list element not found");
+        return;
+    }
     const bookmarks = loadBookmarks();
+    if (!eventsData || eventsData.length === 0) {
+        eventList.innerHTML = '<p>イベントがありません。</p>';
+        return;
+    }
     eventList.innerHTML = eventsData.map(event => `
         <div class="event-item" data-id="${event.id}">
             <div class="event-icon-container">
@@ -324,20 +343,7 @@ function displayEventList() {
         </div>
     `).join('');
 
-    eventList.querySelectorAll('.event-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            if (!e.target.classList.contains('bookmark-icon')) {
-                showEventDetail(item.dataset.id);
-            }
-        });
-    });
-
-    eventList.querySelectorAll('.bookmark-icon').forEach(icon => {
-        icon.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleBookmark(icon.dataset.id);
-        });
-    });
+    addEventListeners(eventList);
 }
 
 // ブックマークの状態を保存する関数

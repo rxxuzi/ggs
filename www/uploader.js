@@ -1,28 +1,15 @@
-let baseUrl = '';
-
-async function loadBaseUrl() {
-    try {
-        const response = await fetch('address.txt');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        baseUrl = await response.text();
-        baseUrl = baseUrl.trim(); // 余分な空白を削除
-        console.log("Base URL loaded:", baseUrl);
-    } catch (error) {
-        console.error("Base URLの読み込みに失敗しました:", error);
-    }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('eventForm');
     const resultDiv = document.getElementById('result');
 
-    form.addEventListener('submit', async (e) => {
+    // 既存のイベントデータをロード
+    let eventsData = JSON.parse(localStorage.getItem('eventsData')) || [];
+
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
 
         const eventData = {
-            id: uuid.v4(),
+            id: generateUUID(),
             eventName: document.getElementById('eventName').value,
             shortDescription: document.getElementById('shortDescription').value,
             description: document.getElementById('description').value,
@@ -34,23 +21,27 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('/api/events', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(eventData),
-            });
+            // 新しいイベントを追加
+            eventsData.push(eventData);
+            
+            // ローカルストレージに保存
+            localStorage.setItem('eventsData', JSON.stringify(eventsData));
 
-            if (response.ok) {
-                const result = await response.json();
-                resultDiv.textContent = `イベントが正常に追加されました。ID: ${result.id}`;
-                form.reset();
-            } else {
-                resultDiv.textContent = 'エラー: イベントの追加に失敗しました。';
-            }
+            resultDiv.textContent = `イベントが正常に追加されました。ID: ${eventData.id}`;
+            form.reset();
+
+            // 開発用：コンソールに現在のイベントデータを表示
+            console.log('Current events data:', eventsData);
         } catch (error) {
             resultDiv.textContent = `エラー: ${error.message}`;
         }
     });
 });
+
+// UUIDを生成する関数
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
