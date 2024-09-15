@@ -14,8 +14,7 @@ async function loadBaseUrl() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    await loadBaseUrl();
+document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('eventForm');
     const resultDiv = document.getElementById('result');
 
@@ -35,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         try {
-            const response = await fetch(`${baseUrl}/events`, {
+            const response = await fetch('/api/events', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

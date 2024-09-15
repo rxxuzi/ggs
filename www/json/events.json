@@ -1,0 +1,101 @@
+[
+  {
+    "id": "601ef14b-775e-4b68-ab9a-49287628169b",
+    "eventName": "Example",
+    "shortDescription": "This is Example.",
+    "description": "This is example event",
+    "platform": "My domain",
+    "deadline": "2024-09-16",
+    "conditions": "Anyone",
+    "communityLink": "https://www.example.com",
+    "author": "a@a.com"
+  },
+  {
+    "id": "1bb0b3d7-3236-41bc-a62a-b2abdbc08c42",
+    "eventName": "Google Meet Conference",
+    "shortDescription": "オンライン技術カンファレンス",
+    "description": "クラウドコンピューティングとAI技術の最新トレンドについて議論するオンラインカンファレンスです。",
+    "platform": "Google Meet",
+    "deadline": "2024-10-04",
+    "conditions": "要登録",
+    "communityLink": "https://www.example.com",
+    "author": "a@example.com"
+  },
+  {
+    "id": "cd2bce29-5b9d-4b58-89a6-187f4e2e0a8e",
+    "eventName": "Discord Developer Meetup",
+    "shortDescription": "開発者同士のチャットミートアップ",
+    "description": "Discordでオープンソースプロジェクトについて議論し、協力するためのミートアップです。",
+    "platform": "Discord",
+    "deadline": "2024-12-15",
+    "conditions": "Discordサーバーへの参加",
+    "communityLink": "https://www.example.com",
+    "author": "dev@discord.com"
+  },
+  {
+    "id": "fd45690b-2b18-4a37-8d24-3409f5ef07f5",
+    "eventName": "Telegram Hackathon",
+    "shortDescription": "Telegramでボットを作ろう",
+    "description": "Telegramボットを開発し、実世界の問題を解決することを目的としたハッカソンです。",
+    "platform": "Telegram",
+    "deadline": "2025-01-10",
+    "conditions": "4人までのチーム",
+    "communityLink": "https://www.example.com",
+    "author": "info@telegram.com"
+  },
+  {
+    "id": "a3c9b8d4-23e5-4b39-8b48-57ff56291ae4",
+    "eventName": "Microsoft Teams Webinar",
+    "shortDescription": "リモートワーク向けの生産性ツール",
+    "description": "Microsoft Teamsの新しい生産性機能と、リモートコラボレーションを向上させる方法について学ぶウェビナーです。",
+    "platform": "Microsoft Teams",
+    "deadline": "2024-11-01",
+    "conditions": "無料ウェビナー、要登録",
+    "communityLink": "https://www.example.com",
+    "author": "teams@microsoft.com"
+  },
+  {
+    "id": "b67e4fd8-c528-43b1-babc-5c9b26773a9d",
+    "eventName": "オンライン料理教室",
+    "shortDescription": "家庭でできる簡単レシピ",
+    "description": "Zoomを使って、プロのシェフが家庭でできる簡単なレシピを教えてくれるオンライン料理教室です。",
+    "platform": "Zoom",
+    "deadline": "2024-12-01",
+    "conditions": "初心者歓迎、要予約",
+    "communityLink": "https://www.example.com",
+    "author": "cooking@zoom.com"
+  },
+  {
+    "id": "f41f4e3d-9192-4d5c-8c56-897a4b2a8e4e",
+    "eventName": "オンラインボランティア活動",
+    "shortDescription": "自宅から参加できるボランティア",
+    "description": "Microsoft Teamsを使って、リモートで参加できるボランティア活動。環境保護や社会福祉に関するプロジェクトに参加できます。",
+    "platform": "Microsoft Teams",
+    "deadline": "2024-11-15",
+    "conditions": "誰でも参加可能、登録必須",
+    "communityLink": "https://www.example.com",
+    "author": "volunteer@teams.com"
+  },
+  {
+    "id": "d45f3e9c-3a3f-42e1-b3f1-bb86b6cbd69e",
+    "eventName": "GitHub オープンソースプロジェクト貢献",
+    "shortDescription": "オープンソースに貢献しよう！",
+    "description": "GitHubでホスティングされているオープンソースプロジェクトにリモートで貢献するためのイベントです。初心者でも参加でき、経験豊富なメンターがサポートします。",
+    "platform": "GitHub",
+    "deadline": "2024-12-31",
+    "conditions": "誰でも参加可能",
+    "communityLink": "https://www.example.com",
+    "author": "opensource@github.com"
+  },
+  {
+    "id": "f2a7f57c-e673-4f28-b6c1-d5219c88de9d",
+    "eventName": "Slack チームコラボレーションワークショップ",
+    "shortDescription": "チームワーク向上ワークショップ",
+    "description": "Slackを活用して、リモートで効果的なチームコラボレーションの方法を学ぶワークショップです。コミュニケーションの最適化やプロジェクト管理のコツを学べます。",
+    "platform": "Slack",
+    "deadline": "2024-10-20",
+    "conditions": "事前登録が必要",
+    "communityLink": "https://www.example.com",
+    "author": "workshop@slack.com"
+  }
+]

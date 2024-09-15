@@ -52,28 +52,13 @@ async function loadBaseUrl() {
 }
 
 async function fetchEvents() {
-    if (!baseUrl) {
-        await loadBaseUrl();
-    }
     try {
-        console.log(`Attempting to fetch events from: ${baseUrl}/events`);
-        const response = await fetch(`${baseUrl}/events`, {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
+        const response = await fetch('json/events.json');
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}, statusText: ${response.statusText}`);
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const text = await response.text();
-        try {
-            eventsData = JSON.parse(text);
-        } catch (parseError) {
-            throw new Error(`JSON parse error: ${parseError.message}, Response text: ${text}`);
-        }
-        await fetchJoinStatus(); // Join状態を取得
+        eventsData = await response.json();
+        await fetchJoinStatus();
         displayEventList();
     } catch (error) {
         console.error("イベントデータの取得に失敗しました:", error);
@@ -82,7 +67,6 @@ async function fetchEvents() {
             eventList.innerHTML = `
                 <p>イベントデータの取得に失敗しました。</p>
                 <p>エラー詳細: ${error.message}</p>
-                <p>URL: ${baseUrl}/events</p>
                 <p>しばらくしてからもう一度お試しください。問題が続く場合は管理者にお問い合わせください。</p>
             `;
         }
@@ -92,37 +76,73 @@ async function fetchEvents() {
 
 async function fetchJoinStatus() {
     try {
-        const response = await fetch(`${baseUrl}/join-status`);
+        const response = await fetch('json/join_status.json');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        joinStatusMap = await response.json();
-        console.log("Join status fetched:", joinStatusMap);
+        joinStatusData = await response.json();
+        console.log("Join status fetched:", joinStatusData);
     } catch (error) {
         console.error("Join状態の取得に失敗しました:", error);
+        joinStatusData = []; // エラーの場合は空の配列を設定
     }
 }
 
-async function toggleJoin(eventId) {
-    const event = eventsData.find(e => e.id === eventId);
-    const isJoined = joinStatusMap[eventId]?.includes(currentUser) || false;
-    const newJoinStatus = !isJoined;
-    try {
-        const response = await fetch(`${baseUrl}/toggle-join`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ eventId, user: currentUser, joined: newJoinStatus }),
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+function getJoinedUsers(eventId) {
+    return joinStatusData
+        .filter(entry => entry.eventId === eventId && entry.joined)
+        .map(entry => entry.user);
+}
+
+function isUserJoined(eventId, user) {
+    return joinStatusData.some(entry => 
+        entry.eventId === eventId && entry.user === user && entry.joined
+    );
+}
+
+function calculateMatchingCounts() {
+    const userMatchCounts = {};
+    
+    joinStatusData.forEach(entry => {
+        if (entry.user === currentUser && entry.joined) {
+            const eventUsers = getJoinedUsers(entry.eventId);
+            eventUsers.forEach(user => {
+                if (user !== currentUser) {
+                    userMatchCounts[user] = (userMatchCounts[user] || 0) + 1;
+                }
+            });
         }
-        await fetchJoinStatus(); // Join状態を再取得
-        showEventDetail(eventId); // モーダルを更新
-    } catch (error) {
-        console.error("Join状態の更新に失敗しました:", error);
+    });
+    
+    return Object.entries(userMatchCounts)
+        .filter(([_, count]) => count >= 2)
+        .sort((a, b) => b[1] - a[1]);
+}
+
+async function toggleJoin(eventId) {
+    const isJoined = isUserJoined(eventId, currentUser);
+    const newJoinStatus = !isJoined;
+
+    // 既存のエントリーを探す
+    let existingEntry = joinStatusData.find(entry => 
+        entry.eventId === eventId && entry.user === currentUser
+    );
+
+    if (existingEntry) {
+        existingEntry.joined = newJoinStatus;
+    } else {
+        joinStatusData.push({
+            eventId: eventId,
+            user: currentUser,
+            joined: newJoinStatus
+        });
     }
+
+    // ここで通常はサーバーにデータを送信しますが、
+    // この例ではローカルストレージに保存します
+    localStorage.setItem('joinStatusData', JSON.stringify(joinStatusData));
+
+    showEventDetail(eventId); // モーダルを更新
 }
 
 function displayEventList() {
@@ -199,8 +219,8 @@ function getPlatformIconPath(platform) {
 function showEventDetail(eventId) {
     const event = eventsData.find(e => e.id === eventId);
     const bookmarks = loadBookmarks();
-    const isJoined = joinStatusMap[eventId]?.includes(currentUser) || false;
-    const joinedUsers = joinStatusMap[eventId] || [];
+    const joinedUsers = getJoinedUsers(eventId);
+    const isJoined = isUserJoined(eventId, currentUser);
     const matchingCounts = calculateMatchingCounts();
     const modal = document.getElementById('event-detail');
     modal.innerHTML = `

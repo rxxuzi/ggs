@@ -394,3 +394,55 @@ body {
 #search-button:hover {
     background-color: #3a7bc1;
 }
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 5px 0 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    transition: var(--transition);
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.button:hover {
+    background-color: #3a7bc1;
+}
+
+.button:active {
+    transform: scale(0.95);
+}
+
+.share-button {
+    background-color: var(--secondary-color);
+}
+
+.search-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#search-input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid var(--text-secondary);
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+    background-color: var(--card-background);
+    color: var(--text-primary);
+}
+
+#search-button {
+    border-radius: 0 4px 4px 0;
+    margin: 0;
+}
+
+
+#hello h1 {
+    font-size: 42px; /* 元のサイズよりも小さく設定 */
+    margin-bottom: 15px; /* 下のマージンを追加 */
+}

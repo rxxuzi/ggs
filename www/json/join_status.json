@@ -1,0 +1,62 @@
+[
+  {
+    "eventId": "",
+    "user": "Sora",
+    "joined": true
+  },
+  {
+    "eventId": "601ef14b-775e-4b68-ab9a-49287628169b",
+    "user": "Sora",
+    "joined": true
+  },
+  {
+    "eventId": "fd45690b-2b18-4a37-8d24-3409f5ef07f5",
+    "user": "Sora",
+    "joined": true
+  },
+  {
+    "eventId": "a3c9b8d4-23e5-4b39-8b48-57ff56291ae4",
+    "user": "Sora",
+    "joined": true
+  },
+  {
+    "eventId": "1bb0b3d7-3236-41bc-a62a-b2abdbc08c42",
+    "user": "Aoi",
+    "joined": true
+  },
+  {
+    "eventId": "fd45690b-2b18-4a37-8d24-3409f5ef07f5",
+    "user": "Aoi",
+    "joined": true
+  },
+  {
+    "eventId": "b67e4fd8-c528-43b1-babc-5c9b26773a9d",
+    "user": "Aoi",
+    "joined": true
+  },
+  {
+    "eventId": "f2a7f57c-e673-4f28-b6c1-d5219c88de9d",
+    "user": "Aoi",
+    "joined": true
+  },
+  {
+    "eventId": "601ef14b-775e-4b68-ab9a-49287628169b",
+    "user": "Jane",
+    "joined": true
+  },
+  {
+    "eventId": "",
+    "user": "Jane",
+    "joined": true
+  },
+  {
+    "eventId": "a3c9b8d4-23e5-4b39-8b48-57ff56291ae4",
+    "user": "Jane",
+    "joined": true
+  },
+  {
+    "eventId": "601ef14b-775e-4b68-ab9a-49287628169b",
+    "user": "Aoi",
+    "joined": true
+  }
+]
