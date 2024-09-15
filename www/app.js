@@ -1,7 +1,7 @@
 let eventsData = [];
 let baseUrl = '';
 let currentUser = '';
-const userNames = ['Jane', 'John', 'Akari', 'Aoi','Sora', 'Junnichi'];
+const userNames = ['Jane'];
 let joinStatusMap = {};
 
 // ページ読み込み時にランダムなユーザーを選択
@@ -237,9 +237,8 @@ function showEventDetail(eventId) {
             <div class="matching-users">
                 <h3>よくマッチするユーザー:</h3>
                 <ul>
-                    ${matchingCounts.map(([user, count]) => `<li>${user} (*${count})</li>`).join('')}
+                    ${matchingCounts.map(([user, count]) => `<li>${user} (${count})</li>`).join('')}
                 </ul>
-                <p class="note">※ (*n)はマッチした回数を表します。2回以上マッチしたユーザーのみ表示されます。</p>
             </div>
         </div>
     `;
