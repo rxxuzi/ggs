@@ -12,10 +12,56 @@ document.addEventListener('DOMContentLoaded', () => {
     loadEvents();
 });
 
+
+document.addEventListener('DOMContentLoaded', () => {
+    currentUser = userNames[Math.floor(Math.random() * userNames.length)];
+    console.log('Current user:', currentUser);
+    const h1 = document.getElementById('hello');
+    h1.innerHTML = `<h1>Hello! ${currentUser}</h1>`
+    loadEvents();
+});
+
 function loadEvents() {
-    eventsData = JSON.parse(localStorage.getItem('eventsData')) || [];
-    joinStatusData = JSON.parse(localStorage.getItem('joinStatusData')) || [];
+    // ウェブストレージからイベントデータを取得
+    const storedEvents = JSON.parse(sessionStorage.getItem('eventsData')) || [];
+    eventsData = storedEvents;
+    
+    // JSONファイルからもイベントデータを取得
+    fetchEvents();
+    
+    joinStatusData = JSON.parse(sessionStorage.getItem('joinStatusData')) || [];
     displayEventList();
+}
+
+async function fetchEvents() {
+    try {
+        const response = await fetch('json/events.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const jsonEvents = await response.json();
+        
+        // JSONのイベントデータとウェブストレージのイベントデータをマージ
+        eventsData = [...eventsData, ...jsonEvents.filter(jsonEvent => 
+            !eventsData.some(storedEvent => storedEvent.id === jsonEvent.id)
+        )];
+        
+        // マージしたデータをウェブストレージに保存
+        sessionStorage.setItem('eventsData', JSON.stringify(eventsData));
+        
+        await fetchJoinStatus();
+        displayEventList();
+    } catch (error) {
+        console.error("イベントデータの取得に失敗しました:", error);
+        const eventList = document.getElementById('event-list');
+        if (eventList) {
+            eventList.innerHTML = `
+                <p>イベントデータの取得に失敗しました。</p>
+                <p>エラー詳細: ${error.message}</p>
+                <p>しばらくしてからもう一度お試しください。問題が続く場合は管理者にお問い合わせください。</p>
+            `;
+        }
+    }
 }
 
 function updateEventList() {
@@ -59,29 +105,6 @@ async function loadBaseUrl() {
         console.error("Base URLの読み込みに失敗しました:", error);
     }
 }
-
-async function fetchEvents() {
-    try {
-        const response = await fetch('json/events.json');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        eventsData = await response.json();
-        await fetchJoinStatus();
-        displayEventList();
-    } catch (error) {
-        console.error("イベントデータの取得に失敗しました:", error);
-        const eventList = document.getElementById('event-list');
-        if (eventList) {
-            eventList.innerHTML = `
-                <p>イベントデータの取得に失敗しました。</p>
-                <p>エラー詳細: ${error.message}</p>
-                <p>しばらくしてからもう一度お試しください。問題が続く場合は管理者にお問い合わせください。</p>
-            `;
-        }
-    }
-}
-
 
 async function fetchJoinStatus() {
     try {
@@ -348,12 +371,12 @@ function displayEventList() {
 
 // ブックマークの状態を保存する関数
 function saveBookmarks(bookmarks) {
-    localStorage.setItem('eventBookmarks', JSON.stringify(bookmarks));
+    sessionStorage.setItem('eventBookmarks', JSON.stringify(bookmarks));
 }
 
 // ブックマークの状態を読み込む関数
 function loadBookmarks() {
-    const savedBookmarks = localStorage.getItem('eventBookmarks');
+    const savedBookmarks = sessionStorage.getItem('eventBookmarks');
     return savedBookmarks ? JSON.parse(savedBookmarks) : {};
 }
 
@@ -362,8 +385,12 @@ function toggleBookmark(eventId) {
     let bookmarks = loadBookmarks();
     bookmarks[eventId] = !bookmarks[eventId];
     saveBookmarks(bookmarks);
-    displayEventList(); // リストを更新
+    
+    // イベントリストとブックマークの両方を更新
+    displayEventList(); 
+    displayBookmarkedEvents(); 
 }
+
 
 document.addEventListener('DOMContentLoaded', displayEventList);
 document.addEventListener('DOMContentLoaded', fetchEvents);
